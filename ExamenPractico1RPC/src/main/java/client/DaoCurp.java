@@ -104,4 +104,28 @@ public class DaoCurp {
         }
         return false;
     }
+    public String listaPersona(String buscar) {
+        String datos = "";
+        try {
+            conn = new MySQLConnection().getConnection();
+            String query = GET_CURP;
+            pstm = conn.prepareStatement(query);
+            pstm.setString(1,buscar);
+            rs = pstm.executeQuery();
+            if (rs.next()){
+                datos ="Nombre: "+ rs.getString("Nombre");
+            }else {
+                datos = "no entró";
+            }
+            datos ="Nombre: "+ rs.getString("Nombre") + "\nApellido paterno: " + rs.getString("Apellido_Paterno")
+                    + "\nApellido materno: " + rs.getString("Apellido_Materno") + "\nEstado: " + rs.getString("Estado_Nacimiento")
+                    + "\nSexo: " + rs.getString("Sexo")
+
+                    + "\nFecha de nacimiento: " + rs.getString("Fecha_Nacimiento");
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        System.out.println(datos);
+        return datos;
+    }
 }
