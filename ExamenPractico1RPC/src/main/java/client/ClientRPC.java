@@ -10,7 +10,7 @@ import java.net.URL;
 import java.util.Scanner;
 
 public class ClientRPC {
-    static Scanner sc = new Scanner(System.in);
+    static Scanner sc = new Scanner(System.in).useDelimiter("\n");
     public static void main(String[] args) throws MalformedURLException, XmlRpcException {
 
         XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
@@ -20,9 +20,18 @@ public class ClientRPC {
         DaoCurp dao = new DaoCurp();
         BeanCurp bean = new BeanCurp();
         String  nombre,  apellido_Paterno,  apellido_Materno,  estado_Nacimiento,  sexo,  curp="", fecha_Nacimiento;
+        int opc;
+        do {
+            System.out.println("CALCULO DE CLAVE UNICA DE REGISTRO DE POBLACION --> CURP");
+            System.out.println("MENU");
+            System.out.println("1.- Calcular CURP");
+            System.out.println("2.- Consultar CURP");
+            System.out.println("3.-Salir");
+            opc = sc.nextInt();
 
-
-        System.out.println("CALCULO DE CLAVE UNICA DE REGISTRO DE POBLACION --> CURP");
+            switch (opc){
+                case 1:
+        sc.nextLine();
         System.out.println("Ingrese su nombre");
         nombre=sc.nextLine();
         nombre=nombre.toUpperCase();
@@ -60,19 +69,27 @@ public class ClientRPC {
         sexo=sexo.toUpperCase();
         System.out.println(nombre+  apellido_Paterno  +apellido_Materno +estado_Nacimiento+  sexo+ fecha_Nacimiento);
 
-
-
-
-
-
-
-/*
-
- */
         Object[] data = { nombre,  apellido_Paterno,  apellido_Materno,  estado_Nacimiento,  sexo, fecha_Nacimiento};
         String response = (String) client.execute("Methods.generar", data);
         System.out.println("Result -> " + response);
         bean.setCurp(response);
+                    break;
+                case 2:
+                    System.out.println("Ingresa curp para buscar");
+                    curp = sc.next().toUpperCase();
+                    Object[] data2 = new Object[]{curp};
+                    String datos = (String) client.execute("Methods.consultar",data2);
+                    System.out.println(datos);
+
+                    break;
+                case 3:
+                    System.out.println("Saliendo...");
+                    break;
+                default:
+                    break;
+
+            }
+        }while (opc<3);
 }
 
 
